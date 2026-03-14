@@ -1,7 +1,7 @@
 'use client';
 
 import { MainCalculator } from '@/components/calculator/MainCalculator';
-
+import { Analytics } from "@vercel/analytics/react"
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -21,6 +21,7 @@ export default function Home() {
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         <MainCalculator />
+        <Analytics />
       </div>
 
       {/* Footer */}
