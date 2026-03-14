@@ -60,11 +60,11 @@ export function MarksBreakdownCalculator({
   };
 
   // Calculate component scores
-  const assignmentScore = (calculateComponentAverage(breakdown.assignments.marks, breakdown.assignments.maxMarks) / breakdown.assignments.maxMarks) * 100;
-  const quizScore = (calculateComponentAverage(breakdown.quizzes.marks, breakdown.quizzes.maxMarks) / breakdown.quizzes.maxMarks) * 100;
-  const midtermScore = (breakdown.midterm.marks / breakdown.midterm.maxMarks) * 100;
-  const finalScore = (breakdown.final.marks / breakdown.final.maxMarks) * 100;
-  const participationScore = breakdown.participation ? (breakdown.participation.marks / breakdown.participation.maxMarks) * 100 : 0;
+  const assignmentScore = (calculateComponentAverage(breakdown.assignments.marks, breakdown.assignments.maxMarks) / (Number(breakdown.assignments.maxMarks) || 1)) * 100;
+  const quizScore = (calculateComponentAverage(breakdown.quizzes.marks, breakdown.quizzes.maxMarks) / (Number(breakdown.quizzes.maxMarks) || 1)) * 100;
+  const midtermScore = (Number(breakdown.midterm.marks) / (Number(breakdown.midterm.maxMarks) || 1)) * 100;
+  const finalScore = (Number(breakdown.final.marks) / (Number(breakdown.final.maxMarks) || 1)) * 100;
+  const participationScore = breakdown.participation ? (Number(breakdown.participation.marks) / (Number(breakdown.participation.maxMarks) || 1)) * 100 : 0;
 
   const config = weightage.useCustomWeightage ? weightage : NIT_DEFAULT_WEIGHTAGE;
 
@@ -132,7 +132,7 @@ export function MarksBreakdownCalculator({
             description="Enter your midterm examination marks."
             marks={[breakdown.midterm.marks]}
             maxMarks={breakdown.midterm.maxMarks}
-            onMarksChange={(marks) => setBreakdown({ ...breakdown, midterm: { ...breakdown.midterm, marks: marks[0] || 0 } })}
+            onMarksChange={(marks) => setBreakdown({ ...breakdown, midterm: { ...breakdown.midterm, marks: marks[0] ?? '' } })}
             onMaxMarksChange={(maxMarks) => setBreakdown({ ...breakdown, midterm: { ...breakdown.midterm, maxMarks } })}
             icon={<BookOpen className="w-5 h-5" />}
             allowMultiple={false}
@@ -146,7 +146,7 @@ export function MarksBreakdownCalculator({
             description="Enter your final examination marks."
             marks={[breakdown.final.marks]}
             maxMarks={breakdown.final.maxMarks}
-            onMarksChange={(marks) => setBreakdown({ ...breakdown, final: { ...breakdown.final, marks: marks[0] || 0 } })}
+            onMarksChange={(marks) => setBreakdown({ ...breakdown, final: { ...breakdown.final, marks: marks[0] ?? '' } })}
             onMaxMarksChange={(maxMarks) => setBreakdown({ ...breakdown, final: { ...breakdown.final, maxMarks } })}
             icon={<Trophy className="w-5 h-5" />}
             allowMultiple={false}
@@ -158,9 +158,9 @@ export function MarksBreakdownCalculator({
           <AssessmentInput
             title="Participation/Attendance"
             description="Enter your class participation and attendance marks."
-            marks={[breakdown.participation?.marks || 0]}
+            marks={[breakdown.participation?.marks ?? 0]}
             maxMarks={breakdown.participation?.maxMarks || 10}
-            onMarksChange={(marks) => setBreakdown({ ...breakdown, participation: { marks: marks[0] || 0, maxMarks: breakdown.participation?.maxMarks || 10 } })}
+            onMarksChange={(marks) => setBreakdown({ ...breakdown, participation: { marks: marks[0] ?? '', maxMarks: breakdown.participation?.maxMarks || 10 } })}
             onMaxMarksChange={(maxMarks) => setBreakdown({ ...breakdown, participation: { ...breakdown.participation!, maxMarks } })}
             allowMultiple={false}
           />

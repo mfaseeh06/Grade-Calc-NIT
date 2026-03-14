@@ -5,24 +5,24 @@ import { getGradeFromPercentage } from './gradePolicy';
  */
 export interface AssessmentBreakdown {
   assignments: {
-    marks: number[];
-    maxMarks: number;
+    marks: (number | string)[];
+    maxMarks: number | string;
   };
   quizzes: {
-    marks: number[];
-    maxMarks: number;
+    marks: (number | string)[];
+    maxMarks: number | string;
   };
   midterm: {
-    marks: number;
-    maxMarks: number;
+    marks: number | string;
+    maxMarks: number | string;
   };
   final: {
-    marks: number;
-    maxMarks: number;
+    marks: number | string;
+    maxMarks: number | string;
   };
   participation?: {
-    marks: number;
-    maxMarks: number;
+    marks: number | string;
+    maxMarks: number | string;
   };
 }
 
@@ -164,10 +164,10 @@ export function validateWeightageConfig(config: WeightageConfig): { valid: boole
 /**
  * Calculate component averages from individual marks
  */
-export function calculateComponentAverage(marks: number[], maxMarks: number): number {
+export function calculateComponentAverage(marks: (number | string)[], maxMarks: number | string): number {
   if (marks.length === 0) return 0;
-  const average = marks.reduce((sum, mark) => sum + mark, 0) / marks.length;
-  return Math.min(average, maxMarks); // Ensure doesn't exceed max
+  const average = marks.reduce((sum: number, mark) => sum + (Number(mark) || 0), 0) / marks.length;
+  return Math.min(average, Number(maxMarks) || 0); // Ensure doesn't exceed max
 }
 
 /**
@@ -179,16 +179,16 @@ export function calculateFinalMarksFromBreakdown(
 ): number {
   const assignmentAvg = calculateComponentAverage(breakdown.assignments.marks, breakdown.assignments.maxMarks);
   const quizAvg = calculateComponentAverage(breakdown.quizzes.marks, breakdown.quizzes.maxMarks);
-  const midtermScore = breakdown.midterm.marks;
-  const finalScore = breakdown.final.marks;
-  const participationScore = breakdown.participation?.marks || 0;
+  const midtermScore = Number(breakdown.midterm.marks) || 0;
+  const finalScore = Number(breakdown.final.marks) || 0;
+  const participationScore = Number(breakdown.participation?.marks) || 0;
 
   // Normalize all scores to 0-100 scale
-  const assignmentNormalized = (assignmentAvg / breakdown.assignments.maxMarks) * 100;
-  const quizNormalized = (quizAvg / breakdown.quizzes.maxMarks) * 100;
-  const midtermNormalized = (midtermScore / breakdown.midterm.maxMarks) * 100;
-  const finalNormalized = (finalScore / breakdown.final.maxMarks) * 100;
-  const participationNormalized = breakdown.participation ? (participationScore / breakdown.participation.maxMarks) * 100 : 0;
+  const assignmentNormalized = (assignmentAvg / (Number(breakdown.assignments.maxMarks) || 1)) * 100;
+  const quizNormalized = (quizAvg / (Number(breakdown.quizzes.maxMarks) || 1)) * 100;
+  const midtermNormalized = (midtermScore / (Number(breakdown.midterm.maxMarks) || 1)) * 100;
+  const finalNormalized = (finalScore / (Number(breakdown.final.maxMarks) || 1)) * 100;
+  const participationNormalized = breakdown.participation ? (participationScore / (Number(breakdown.participation.maxMarks) || 1)) * 100 : 0;
 
   const config = weightage.useCustomWeightage ? weightage : NIT_DEFAULT_WEIGHTAGE;
 

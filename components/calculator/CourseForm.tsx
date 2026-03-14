@@ -18,8 +18,8 @@ interface CourseFormProps {
 export function CourseForm({ onSubmit, onCancel, initialData, isEditing = false }: CourseFormProps) {
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
-    credits: initialData?.credits || 4,
-    marks: initialData?.marks || 0,
+    credits: String(initialData?.credits ?? 4),
+    marks: String(initialData?.marks ?? 0),
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -34,11 +34,11 @@ export function CourseForm({ onSubmit, onCancel, initialData, isEditing = false 
       newErrors.name = 'Course name is required';
     }
 
-    if (formData.credits <= 0 || formData.credits > 10) {
+    if (formData.credits === '' || Number(formData.credits) <= 0 || Number(formData.credits) > 10) {
       newErrors.credits = 'Credits must be between 1 and 10';
     }
 
-    if (formData.marks < 0 || formData.marks > 100) {
+    if (formData.marks === '' || Number(formData.marks) < 0 || Number(formData.marks) > 100) {
       newErrors.marks = 'Marks must be between 0 and 100';
     }
 
@@ -49,10 +49,14 @@ export function CourseForm({ onSubmit, onCancel, initialData, isEditing = false 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      const finalMarks = useBreakdown ? breakdownMarks : formData.marks;
-      onSubmit({ ...formData, marks: finalMarks });
+      const finalMarks = useBreakdown ? breakdownMarks : Number(formData.marks);
+      onSubmit({ 
+        name: formData.name, 
+        credits: Number(formData.credits), 
+        marks: finalMarks 
+      });
       if (!isEditing) {
-        setFormData({ name: '', credits: 4, marks: 0 });
+        setFormData({ name: '', credits: '4', marks: '0' });
         setBreakdownMarks(0);
         setUseBreakdown(false);
       }
@@ -84,7 +88,7 @@ export function CourseForm({ onSubmit, onCancel, initialData, isEditing = false 
                 min="1"
                 max="10"
                 value={formData.credits}
-                onChange={(e) => setFormData({ ...formData, credits: parseInt(e.target.value) || 0 })}
+                onChange={(e) => setFormData({ ...formData, credits: e.target.value })}
                 className="bg-input border-border text-foreground"
               />
               {errors.credits && <p className="text-red-500 text-xs mt-1">{errors.credits}</p>}
@@ -98,7 +102,7 @@ export function CourseForm({ onSubmit, onCancel, initialData, isEditing = false 
                   min="0"
                   max="100"
                   value={formData.marks}
-                  onChange={(e) => setFormData({ ...formData, marks: parseInt(e.target.value) || 0 })}
+                  onChange={(e) => setFormData({ ...formData, marks: e.target.value })}
                   className="bg-input border-border text-foreground"
                 />
                 {errors.marks && <p className="text-red-500 text-xs mt-1">{errors.marks}</p>}

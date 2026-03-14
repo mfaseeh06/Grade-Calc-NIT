@@ -81,7 +81,7 @@ export function WeightageConfiguration({ value, onChange }: WeightageConfigurati
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold text-foreground">Assessment Weightage</h3>
-            <p className="text-sm text-muted-foreground mt-1">Configure how different components contribute to your final marks</p>
+            <p className="text-sm text-muted-foreground mt-1">Configure how different components contribute to your final marks. (First remove course name for custom weightage)</p>
           </div>
           <div className="text-right">
             <p className="text-xs text-muted-foreground">Total Weightage</p>

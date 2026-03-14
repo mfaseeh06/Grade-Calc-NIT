@@ -8,10 +8,10 @@ import { Plus, Trash2 } from 'lucide-react';
 interface AssessmentInputProps {
   title: string;
   description: string;
-  marks: number[];
-  maxMarks: number;
-  onMarksChange: (marks: number[]) => void;
-  onMaxMarksChange: (maxMarks: number) => void;
+  marks: (number | string)[];
+  maxMarks: number | string;
+  onMarksChange: (marks: (number | string)[]) => void;
+  onMaxMarksChange: (maxMarks: number | string) => void;
   icon?: React.ReactNode;
   allowMultiple?: boolean;
 }
@@ -34,13 +34,17 @@ export function AssessmentInput({
     onMarksChange(marks.filter((_, i) => i !== index));
   };
 
-  const handleMarkChange = (index: number, value: number) => {
+  const handleMarkChange = (index: number, value: string) => {
     const newMarks = [...marks];
-    newMarks[index] = Math.min(value, maxMarks);
+    if (value === '') {
+      newMarks[index] = '';
+    } else {
+      newMarks[index] = Math.min(Number(value) || 0, Number(maxMarks) || 0);
+    }
     onMarksChange(newMarks);
   };
 
-  const average = marks.length > 0 ? Math.round((marks.reduce((a, b) => a + b, 0) / marks.length) * 100) / 100 : 0;
+  const average = marks.length > 0 ? Math.round((marks.reduce((a: number, b) => a + (Number(b) || 0), 0) / marks.length) * 100) / 100 : 0;
 
   return (
     <Card className="p-5 border-border bg-card hover:bg-muted/50 transition-colors">
@@ -72,7 +76,7 @@ export function AssessmentInput({
             min="1"
             max="1000"
             value={maxMarks}
-            onChange={(e) => onMaxMarksChange(parseFloat(e.target.value) || 1)}
+            onChange={(e) => onMaxMarksChange(e.target.value)}
             className="font-semibold"
           />
           <span className="text-muted-foreground font-semibold">marks</span>
@@ -87,10 +91,11 @@ export function AssessmentInput({
           <Input
             type="number"
             min="0"
-            max={maxMarks}
-            value={marks[0] || ''}
-            onChange={(e) => handleMarkChange(0, parseFloat(e.target.value) || 0)}
+            max={Number(maxMarks)}
+            value={marks[0] ?? ''}
+            onChange={(e) => handleMarkChange(0, e.target.value)}
             placeholder="Enter marks"
+
             className="text-center font-bold"
           />
           <span className="text-muted-foreground text-sm font-semibold min-w-fit">/ {maxMarks}</span>
@@ -117,9 +122,9 @@ export function AssessmentInput({
                   <Input
                     type="number"
                     min="0"
-                    max={maxMarks}
-                    value={mark}
-                    onChange={(e) => handleMarkChange(index, parseFloat(e.target.value) || 0)}
+                    max={Number(maxMarks)}
+                    value={mark ?? ''}
+                    onChange={(e) => handleMarkChange(index, e.target.value)}
                     className="text-center font-bold"
                   />
                   <span className="text-muted-foreground text-sm font-semibold min-w-fit">/ {maxMarks}</span>
