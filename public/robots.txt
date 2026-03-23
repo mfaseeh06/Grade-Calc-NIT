@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nit-gradecalc.vercel.app/sitemap.xml

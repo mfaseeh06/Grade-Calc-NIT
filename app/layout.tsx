@@ -7,9 +7,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'NIT GPA Calculator',
+  title: 'NIT GPA Calculator | Official Grading Policy',
   description: 'Calculate your GPA and CGPA according to NIT\'s grading policy',
-  generator: 'Faseeh',
+  keywords: ['NIT', 'National Institute of Technology', 'GPA', 'CGPA', 'Calculator', 'NIT GPA Calculator', 'NIT CGPA Calculator', 'NIT GPA Calculator Official Grading Policy', 'NIT CGPA Calculator Official Grading Policy'],
   verification: {
     google: 'lJGlx8QQdp7G9GzvK1FE0kf1GjsBEijmFjQhFr-eWxg',
     other: {
