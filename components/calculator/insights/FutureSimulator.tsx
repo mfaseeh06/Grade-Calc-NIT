@@ -29,10 +29,10 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
     const savedCourses = localStorage.getItem('gradecalc_future_courses');
     const savedForm = localStorage.getItem('gradecalc_future_form');
     if (savedCourses) {
-      try { setPlannedCourses(JSON.parse(savedCourses)); } catch (e) {}
+      try { setPlannedCourses(JSON.parse(savedCourses)); } catch (e) { }
     }
     if (savedForm) {
-      try { setFormData(JSON.parse(savedForm)); } catch (e) {}
+      try { setFormData(JSON.parse(savedForm)); } catch (e) { }
     }
     setMounted(true);
   }, []);
@@ -48,9 +48,9 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
     e.preventDefault();
     const credits = Number(formData.credits) || 0;
     const marks = Number(formData.marks) || 0;
-    
+
     if (credits <= 0 || marks < 0 || marks > 100) return;
-    
+
     setPlannedCourses([
       ...plannedCourses,
       {
@@ -60,7 +60,7 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
         marks,
       }
     ]);
-    
+
     setFormData({ name: '', credits: '', marks: '' });
   };
 
@@ -70,10 +70,10 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
 
   // Calculate Projection
   const currentGradePoints = currentCGPA * totalCredits;
-  
+
   let plannedGradePoints = 0;
   let plannedCredits = 0;
-  
+
   plannedCourses.forEach(course => {
     const result = calculateCourseGPA(course.marks);
     if (result) {
@@ -81,9 +81,9 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
       plannedCredits += course.credits;
     }
   });
-  
-  const projectedCGPA = (totalCredits + plannedCredits) > 0 
-    ? (currentGradePoints + plannedGradePoints) / (totalCredits + plannedCredits) 
+
+  const projectedCGPA = (totalCredits + plannedCredits) > 0
+    ? (currentGradePoints + plannedGradePoints) / (totalCredits + plannedCredits)
     : currentCGPA;
 
   const cgpaDiff = projectedCGPA - currentCGPA;
@@ -136,10 +136,10 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
                   <p className="font-semibold text-sm">{course.name}</p>
                   <p className="text-xs text-muted-foreground">{course.credits} Credits • {course.marks} Marks ({gradeResult?.grade || '?'})</p>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-destructive opacity-70"
                   onClick={() => removeCourse(course.id)}
                 >
                   <Trash2 className="w-4 h-4" />
@@ -152,31 +152,31 @@ export function FutureSimulator({ currentCGPA, totalCredits }: FutureSimulatorPr
 
       <form onSubmit={addCourse} className="grid grid-cols-12 gap-2 mt-auto pt-4 border-t border-border">
         <div className="col-span-12 sm:col-span-5">
-          <Input 
-            placeholder="Course Name" 
-            value={formData.name} 
-            onChange={e => setFormData({...formData, name: e.target.value})}
+          <Input
+            placeholder="Course Name"
+            value={formData.name}
+            onChange={e => setFormData({ ...formData, name: e.target.value })}
             className="h-9 text-sm bg-background border-border shadow-sm"
           />
         </div>
         <div className="col-span-4 sm:col-span-2">
-          <Input 
-            type="number" 
-            placeholder="Cr" 
+          <Input
+            type="number"
+            placeholder="Cr"
             min="1" max="10"
-            value={formData.credits} 
-            onChange={e => setFormData({...formData, credits: e.target.value})}
+            value={formData.credits}
+            onChange={e => setFormData({ ...formData, credits: e.target.value })}
             className="h-9 text-sm text-center bg-background border-border shadow-sm"
             title="Credits"
           />
         </div>
         <div className="col-span-4 sm:col-span-3">
-          <Input 
-            type="number" 
-            placeholder="Marks" 
+          <Input
+            type="number"
+            placeholder="Marks"
             min="0" max="100"
-            value={formData.marks} 
-            onChange={e => setFormData({...formData, marks: e.target.value})}
+            value={formData.marks}
+            onChange={e => setFormData({ ...formData, marks: e.target.value })}
             className="h-9 text-sm text-center bg-background border-border shadow-sm"
             title="Expected Marks (0-100)"
           />
