@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: 'NIT GPA Calculator',
   description: 'Calculate your GPA and CGPA according to NIT\'s grading policy',
   generator: 'Faseeh',
+  verification: {
+    google: 'lJGlx8QQdp7G9GzvK1FE0kf1GjsBEijmFjQhFr-eWxg',
+    other: {
+      'google-site-verification': 'lJGlx8QQdp7G9GzvK1FE0kf1GjsBEijmFjQhFr-eWxg',
+    },
+  },
   icons: {
     icon: [
       {
